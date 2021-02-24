@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Add employee page</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+        <form action="#" th:action="@{/save}" th:object="${employee}" method="post">
+            <fieldset>
+                <input type="submit" id="submitButton" th:value="Save">
+                <input type="reset" id="resetButton" name="reset" th:value="Reset"/>
+                <table>
+                        <tr>
+                            <td>Name:</td>
+                            <td><input type="text" th:field="*{name}"</td>
+                        </tr>
+                        <tr>
+                            <td>Email:</td>
+                            <td><input type="text" th:field="*{email}"</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><button type="submit">Save</button></td>
+                        </tr>
+                </table>
+            </fieldset>
+        </form>
+    </body>
+</html>

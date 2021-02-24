@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Home page</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    </head>
+    <body>
+        <p>
+            <div class="container">
+                <div sec:authorize="isAuthenticated()">
+                    <form id="logoutForm" method="POST" th:action="@{/logout}">
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                    </form>
+            
+                    <h2>Welcome <span sec:authentication="name"></span> | <a onclick="document.forms['logoutForm'].submit()">Logout</a></h2>
+                </div>
+              </div>
+        </p>
+
+        <div sec:authorize="isAuthenticated()">
+            Welcome <b><span sec:authentication="name">Username</span></b> &nbsp; 
+            <i><span sec:authentication="principal.authorities">Roles</span></i>
+        
+        </div>        
+        <form th:action="@{/logout}" method="POST">
+                <input type="submit" value="Logout"/>
+        </form> 
+        <div sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">
+            <a href="/new">Add Employee</a>
+        </div>
+          <table border="1" cellpadding="5">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Job Title</th>
+              <th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">Action</th>
+            </tr>
+            <tr th:each="emp : ${employees}">
+              <td th:text="${emp.id}"></td>
+              <td th:text="${emp.name}"></td>
+              <td th:text="${emp.email}"></td>
+              <td th:text="${emp.jobTitle}"></td>
+              <td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
+                <div sec:authorize="hasAnyAuthority('EDITOR', 'ADMIN')">
+                  <a th:href="@{'/edit/' + ${emp.id}}">Edit</a>
+                </div>
+                &nbsp;&nbsp;&nbsp;
+                <div sec:authorize="hasAnyAuthority('ADMIN')">
+                    <a th:href="@{'/delete/' + ${emp.id}}">Delete</a>
+                  </div>
+              </td>
+            </tr>
+          <table>
+    </body>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="/js/main.js"></script>
+  
+</html>
